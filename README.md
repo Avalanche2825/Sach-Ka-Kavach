@@ -104,7 +104,7 @@ SACH Kavach evaluates transactions in real-time, mapping them to the following a
 ## 👥 The Development Team
 
 * **Chitra Saini** (Team Leader) — Frontend Architecture & Onboarding UX
-* **Abhiudhay Jain** — Backend Services & Escrow Security Pipelines
+* **Abhyuday Jain** — Backend Services & Escrow Security Pipelines
 * **Hardik Mathur** — Machine Learning Models & System Integrations
 * **Siddharth Raut** — Risk Algorithms & Threat Overwatch Workflows
 
