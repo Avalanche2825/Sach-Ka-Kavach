@@ -55,6 +55,18 @@ Traditional banking security structures suffer from fundamental flaws:
 
 ---
 
+## 📈 Scalability Across Multiple Banking Channels
+
+As user bases and transaction volumes scale to millions of concurrent operations daily, **Sach Ka Kavach** is engineered to remain highly performant and scalable across diverse banking segments (Retail Banking, Corporate Banking, Mobile App grids like *BoB World*, and API partner integrations):
+
+1. **Stateless API Gateway Architecture**: The Express API gateway layer is completely stateless. It can be horizontally scaled behind a round-robin Load Balancer (such as AWS ALB or Nginx) to distribute traffic dynamically across thousands of Node.js nodes.
+2. **Independent, Serverless ML Services**: The Python Flask ML service is decoupled from the transactional flow. It can be deployed in containerized environments (Kubernetes/EKS or serverless runtimes like AWS Fargate/Google Cloud Run), scaling automatically to process typing timings and device signatures during high-traffic windows.
+3. **High-Velocity Asynchronous Event Broker**: Utilizing non-blocking event loops and Socket.io web-socket pipelines, telemetry timing payloads are pushed out-of-band. This ensures that fraud checks run parallel to the core banking transaction ledger, maintaining zero transaction execution delays.
+4. **Horizontal Sharding & Database Tiering**: Utilizing MongoDB Atlas cloud clustering, data is partitioned horizontally by customer ID (CIF) or branch routing codes. This architecture ensures sub-second retrieval times for risk profiles and audit ledgers, even when records scale into the billions.
+5. **Unified Multi-channel Integration SDK**: The engine exposes a standardized, lightweight `/api/telemetry/evaluate` endpoint. This allows retail web consoles, branch workstations, corporate portals, and mobile app APIs to query the same central trust engine with a uniform JSON envelope.
+
+---
+
 ## 📊 Detailed System Architecture
 
 ```mermaid

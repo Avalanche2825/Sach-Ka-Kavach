@@ -733,6 +733,67 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchConsole }) => 
         </div>
       </section>
 
+      {/* Multi-Channel Scalability Section */}
+      <section id="scalability" className="max-w-7xl mx-auto px-6 py-20 border-t border-slate-900/60 bg-slate-950/20">
+        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+          <span className="text-[10px] font-mono font-bold text-blue-500 uppercase tracking-widest block font-mono">SCALABILITY & PERFORMANCE</span>
+          <h3 className="text-3xl lg:text-4xl font-black text-white font-outfit">Multi-Channel Enterprise Scalability</h3>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Sach Ka Kavach is engineered to scale seamlessly across Retail, Corporate, Mobile (BoB World), and Partner APIs as user bases and transaction volumes grow.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+          <div className="p-6 rounded-2xl bg-slate-900/20 border border-slate-850 hover:border-slate-800 transition duration-300 shadow-sm relative overflow-hidden group">
+            <span className="text-xs font-mono font-bold text-blue-400 uppercase tracking-wider block mb-2">01 / stateless gateways</span>
+            <h4 className="text-base font-extrabold text-white font-outfit">Stateless API Replication</h4>
+            <p className="text-xs text-slate-400 mt-2.5 leading-relaxed">
+              The core API gateway is completely stateless, enabling horizontal scaling behind round-robin load balancers to distribute millions of concurrent requests dynamically.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/20 border border-slate-850 hover:border-slate-800 transition duration-300 shadow-sm relative overflow-hidden group">
+            <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider block mb-2">02 / decoupled models</span>
+            <h4 className="text-base font-extrabold text-white font-outfit">Independent Python ML Scaling</h4>
+            <p className="text-xs text-slate-400 mt-2.5 leading-relaxed">
+              The Flask prediction microservice runs independently. It can be deployed in containerized auto-scaling environments (Kubernetes or serverless runtimes) to handle high-traffic spikes without lag.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/20 border border-slate-850 hover:border-slate-800 transition duration-300 shadow-sm relative overflow-hidden group">
+            <span className="text-xs font-mono font-bold text-indigo-400 uppercase tracking-wider block mb-2">03 / event brokers</span>
+            <h4 className="text-base font-extrabold text-white font-outfit">High-Velocity Event Broker</h4>
+            <p className="text-xs text-slate-400 mt-2.5 leading-relaxed">
+              Utilizing asynchronous event loops and Socket.io channels, telemetry timers are pushed out-of-band to prevent delay in core banking transaction ledgers.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/20 border border-slate-850 hover:border-slate-800 transition duration-300 shadow-sm relative overflow-hidden group">
+            <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider block mb-2">04 / horizontal sharding</span>
+            <h4 className="text-base font-extrabold text-white font-outfit">Database Sharding & Tiering</h4>
+            <p className="text-xs text-slate-400 mt-2.5 leading-relaxed">
+              MongoDB Atlas clusters are partitioned horizontally using customer CIF or branch codes, ensuring sub-second risk profile retrieval even with billions of records.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/20 border border-slate-850 hover:border-slate-800 transition duration-300 shadow-sm relative overflow-hidden group">
+            <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider block mb-2">05 / unified SDK / API</span>
+            <h4 className="text-base font-extrabold text-white font-outfit">Unified Multi-Channel Integration</h4>
+            <p className="text-xs text-slate-400 mt-2.5 leading-relaxed">
+              Exposes a lightweight, standardized telemetry endpoint that allows any channel (Web, Mobile, Branch portals) to interface with the central trust engine uniformly.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-900/20 border border-slate-850 hover:border-slate-800 transition duration-300 shadow-sm relative overflow-hidden group">
+            <span className="text-xs font-mono font-bold text-violet-400 uppercase tracking-wider block mb-2">06 / active caching</span>
+            <h4 className="text-base font-extrabold text-white font-outfit">In-Memory Score Caching</h4>
+            <p className="text-xs text-slate-400 mt-2.5 leading-relaxed">
+              Frequently requested customer trust parameters and session vectors are cached in Redis to minimize database read overhead, keeping verification lookup latency under 15ms.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Team Details Section */}
       <section id="team" className="max-w-7xl mx-auto px-6 py-20 border-t border-slate-900/60 bg-gradient-to-b from-[#070b13] to-[#04070d]">
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
