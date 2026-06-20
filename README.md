@@ -141,21 +141,56 @@ graph LR
 
 ## 👥 The Development Team — Sach Ka Kavach
 
-* **Chitra Saini** (Team Leader) 
-  * **Role**: Frontend Architecture & Onboarding UX
-  * **Gmail**: [chitra24279@gmail.com](mailto:chitra24279@gmail.com)
-  
-* **Abhyuday Jain** 
-  * **Role**: Backend Services & Escrow Security Pipelines
-  * **Gmail**: [abhyuday.23it616@rtu.ac.in](mailto:abhyuday.23it616@rtu.ac.in)
-  
-* **Hardik Mathur** 
-  * **Role**: Machine Learning Models & System Integrations
-  * **Gmail**: [hardikmathur11@gmail.com](mailto:hardikmathur11@gmail.com)
-  
-* **Siddharth Raut** 
-  * **Role**: Risk Algorithms & Threat Overwatch Workflows
-  * **Gmail**: [siddharthraut.risk@gmail.com](mailto:siddharthraut.risk@gmail.com)
+<table width="100%">
+  <tr>
+    <td width="50%" valign="top">
+      <h4>👩‍💻 Chitra Saini (Team Leader)</h4>
+      <ul>
+        <li><b>Degree:</b> BTECH</li>
+        <li><b>Year:</b> 3rd Year</li>
+        <li><b>Branch:</b> Chemical Engineering</li>
+        <li><b>Role:</b> Frontend Architecture & Onboarding UX</li>
+        <li><b>Experience:</b> Graphic Designer & Frontend Architect. Expert in responsive layouts, visual design systems, and onboarding dashboards.</li>
+        <li><b>Gmail:</b> <a href="mailto:chitra24279@gmail.com">chitra24279@gmail.com</a></li>
+      </ul>
+    </td>
+    <td width="50%" valign="top">
+      <h4>👨‍💻 Abhyuday Jain</h4>
+      <ul>
+        <li><b>Degree:</b> BTECH</li>
+        <li><b>Year:</b> 4th Year</li>
+        <li><b>Branch:</b> IT</li>
+        <li><b>Role:</b> Backend Services & Escrow Security Pipelines</li>
+        <li><b>Experience:</b> Cyber Security and AI/ML Expert. 9x Hackathon Finalist. Specialized in Express routing, MongoDB, and multi-signature escrow logic.</li>
+        <li><b>Gmail:</b> <a href="mailto:abhyuday.23it616@rtu.ac.in">abhyuday.23it616@rtu.ac.in</a></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <h4>👨‍💻 Hardik Mathur</h4>
+      <ul>
+        <li><b>Degree:</b> BTECH</li>
+        <li><b>Year:</b> 4th Year</li>
+        <li><b>Branch:</b> CSE</li>
+        <li><b>Role:</b> Machine Learning Models & System Integrations</li>
+        <li><b>Experience:</b> 4X Hackathon Finalist & Open Source Winner. Focuses on integrating Python ML services with frontend telemetry APIs.</li>
+        <li><b>Gmail:</b> <a href="mailto:hardikmathur11@gmail.com">hardikmathur11@gmail.com</a></li>
+      </ul>
+    </td>
+    <td width="50%" valign="top">
+      <h4>👨‍💻 Siddharth Raut</h4>
+      <ul>
+        <li><b>Degree:</b> BTECH</li>
+        <li><b>Year:</b> 4th Year</li>
+        <li><b>Branch:</b> IT</li>
+        <li><b>Role:</b> Risk Algorithms & Threat Overwatch Workflows</li>
+        <li><b>Experience:</b> Cyber Security and AI/ML Expert. 2x Hackathon Finalist & 1x Winner. Specialized in security policies, risk rules, and OTP gateways.</li>
+        <li><b>Gmail:</b> <a href="mailto:rautsiddharth82@gmail.com">rautsiddharth82@gmail.com</a></li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 ---
 
