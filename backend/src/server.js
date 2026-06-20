@@ -60,31 +60,37 @@ io.on('connection', (socket) => {
 const start = async () => {
   const isMongoConnected = await connectDB();
 
-  httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log('\n╔══════════════════════════════════════════════════════╗');
-    console.log('║     SACH Kavach — Bharat Trust Grid v2.0.0           ║');
-    console.log('║     Continuous Identity Trust Engine (CITE)          ║');
-    console.log('╚══════════════════════════════════════════════════════╝\n');
-    console.log(`✓ Express API server:    http://0.0.0.0:${PORT}`);
-    console.log(`✓ Socket.io realtime:   ws://0.0.0.0:${PORT}`);
-    console.log(
-      isMongoConnected
-        ? '✓ MongoDB Atlas:         Connected'
-        : '✓ Identity Memory Engine: Active (in-memory fallback)'
-    );
-    console.log(
-      process.env.GROK_API_KEY
-        ? '✓ Grok AI (xAI):         Armed'
-        : '⚠ Grok API key missing — Groq fallback active'
-    );
-    console.log(
-      process.env.GROQ_API_KEY
-        ? '✓ Groq LLM:              Armed'
-        : '⚠ Groq API key missing — heuristic engine active'
-    );
-    console.log(`  Python ML service:     ${ML_SERVICE_URL}`);
-    console.log('\n  Start ML service with: cd ml_service && python app.py\n');
-  });
+  if (process.env.VERCEL !== '1') {
+    httpServer.listen(PORT, '0.0.0.0', () => {
+      console.log('\n╔══════════════════════════════════════════════════════╗');
+      console.log('║     SACH Kavach — Bharat Trust Grid v2.0.0           ║');
+      console.log('║     Continuous Identity Trust Engine (CITE)          ║');
+      console.log('╚══════════════════════════════════════════════════════╝\n');
+      console.log(`✓ Express API server:    http://0.0.0.0:${PORT}`);
+      console.log(`✓ Socket.io realtime:   ws://0.0.0.0:${PORT}`);
+      console.log(
+        isMongoConnected
+          ? '✓ MongoDB Atlas:         Connected'
+          : '✓ Identity Memory Engine: Active (in-memory fallback)'
+      );
+      console.log(
+        process.env.GROK_API_KEY
+          ? '✓ Grok AI (xAI):         Armed'
+          : '⚠ Grok API key missing — Groq fallback active'
+      );
+      console.log(
+        process.env.GROQ_API_KEY
+          ? '✓ Groq LLM:              Armed'
+          : '⚠ Groq API key missing — heuristic engine active'
+      );
+      console.log(`  Python ML service:     ${ML_SERVICE_URL}`);
+      console.log('\n  Start ML service with: cd ml_service && python app.py\n');
+    });
+  } else {
+    console.log('✓ Express running on Vercel Serverless environment.');
+  }
 };
 
 start();
+
+export default app;
