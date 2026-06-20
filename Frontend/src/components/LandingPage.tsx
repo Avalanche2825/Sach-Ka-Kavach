@@ -316,7 +316,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchConsole }) => 
               href="#about"
               className="px-6 py-4 bg-slate-900/60 hover:bg-slate-900 border border-slate-800 text-slate-355 text-sm font-bold rounded-xl text-center transition shadow-sm"
             >
-              Explore Presentation
+              Explore our understanding
             </a>
           </motion.div>
         </div>
@@ -430,7 +430,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchConsole }) => 
                   : 'text-slate-400 hover:bg-slate-900 hover:text-white'
               }`}
             >
-              🛡️ Our Detailed Solution
+              🛡️ Our Detailed Solution(Tech Stack)
             </button>
           </div>
 
@@ -447,43 +447,85 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchConsole }) => 
                 >
                   <div className="flex items-center gap-3 text-blue-450">
                     <Brain className="w-6 h-6 shrink-0 text-blue-400" />
-                    <h3 className="text-xl font-bold font-outfit">The Core Challenge: Decoupling Trust from Static Gates</h3>
+                    <h3 className="text-xl font-bold font-outfit">The Core Problem: Vulnerabilities of Static Banking Security</h3>
                   </div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     {/* Left detailed text */}
-                    <div className="lg:col-span-6 space-y-4">
+                    <div className="lg:col-span-7 space-y-4">
                       <p className="text-xs text-slate-300 leading-relaxed">
-                        Traditional security systems depend on a binary, transaction-point assumption: <span className="text-white font-semibold">"If credentials match and MFA is passed, the user is permanently trusted for the session."</span> This static gateway approach creates deep system vulnerabilities.
+                        Traditional digital banking gateways rely on static check-points that fail to stop modern social engineering, session hijacks, or internal exploitation. We have identified <span className="text-white font-semibold">8 critical security points</span>:
                       </p>
                       
-                      <div className="space-y-3 pt-2">
-                        <div className="flex gap-3 items-start">
-                          <div className="w-6 h-6 rounded bg-red-950/40 border border-red-900/50 flex items-center justify-center shrink-0 text-[10px] font-bold text-red-400 font-mono mt-0.5">1</div>
-                          <div>
-                            <p className="text-xs font-bold text-white">Continuous Session Takeovers (ATO)</p>
-                            <p className="text-[11px] text-slate-400 leading-relaxed">Malicious agents bypass firewalls via session-hijacks, cookie theft, or SIM swaps, draining account balances without triggering traditional authentication challenges.</p>
-                          </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                        <div className="p-3 bg-red-950/20 border border-red-900/30 rounded-xl space-y-1">
+                          <p className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                            <span className="w-4 h-4 rounded bg-red-900/30 text-[9px] flex items-center justify-center text-red-400 font-mono">1</span>
+                            Static Credentials Fail
+                          </p>
+                          <p className="text-[10px] text-slate-400 leading-relaxed">Passwords and static OTPs are no longer sufficient against modern phishing, SIM swaps, and credential theft.</p>
                         </div>
-                        <div className="flex gap-3 items-start">
-                          <div className="w-6 h-6 rounded bg-red-950/40 border border-red-900/50 flex items-center justify-center shrink-0 text-[10px] font-bold text-red-400 font-mono mt-0.5">2</div>
-                          <div>
-                            <p className="text-xs font-bold text-white">Syndicated Identity Fraud (Swarm KYC)</p>
-                            <p className="text-[11px] text-slate-400 leading-relaxed">Fraud rings automate applications using complex relationship graphs of shared hardware fingerprints, similar IP nodes, and duplicate Aadhaar nominee configurations.</p>
-                          </div>
+
+                        <div className="p-3 bg-red-950/20 border border-red-900/30 rounded-xl space-y-1">
+                          <p className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                            <span className="w-4 h-4 rounded bg-red-900/30 text-[9px] flex items-center justify-center text-red-400 font-mono">2</span>
+                            One-Time Verification
+                          </p>
+                          <p className="text-[10px] text-slate-400 leading-relaxed">Existing systems verify identity only once during login and do not continuously assess if the user is still the genuine holder.</p>
                         </div>
-                        <div className="flex gap-3 items-start">
-                          <div className="w-6 h-6 rounded bg-red-950/40 border border-red-900/50 flex items-center justify-center shrink-0 text-[10px] font-bold text-red-400 font-mono mt-0.5">3</div>
-                          <div>
-                            <p className="text-xs font-bold text-white">Privileged Internal Vulnerabilities</p>
-                            <p className="text-[11px] text-slate-400 leading-relaxed">Bank employees can query client databases arbitrarily without customer authorization, presenting a major risk of corporate data exfiltration and identity leaks.</p>
-                          </div>
+
+                        <div className="p-3 bg-red-950/20 border border-red-900/30 rounded-xl space-y-1">
+                          <p className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                            <span className="w-4 h-4 rounded bg-red-900/30 text-[9px] flex items-center justify-center text-red-400 font-mono">3</span>
+                            Account Takeovers (ATO)
+                          </p>
+                          <p className="text-[10px] text-slate-400 leading-relaxed">Unusual transaction amounts, abnormal login cadences, location changes, or new device signatures indicate hijacking.</p>
+                        </div>
+
+                        <div className="p-3 bg-red-950/20 border border-red-900/30 rounded-xl space-y-1">
+                          <p className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                            <span className="w-4 h-4 rounded bg-red-900/30 text-[9px] flex items-center justify-center text-red-400 font-mono">4</span>
+                            Onboarding KYC Frauds
+                          </p>
+                          <p className="text-[10px] text-slate-400 leading-relaxed">Fraudsters create fake, mule, or synthetic accounts by exploiting weaknesses in the KYC onboarding relationship pipeline.</p>
+                        </div>
+
+                        <div className="p-3 bg-red-950/20 border border-red-900/30 rounded-xl space-y-1">
+                          <p className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                            <span className="w-4 h-4 rounded bg-red-900/30 text-[9px] flex items-center justify-center text-red-400 font-mono">5</span>
+                            Suspect Recovery Traps
+                          </p>
+                          <p className="text-[10px] text-slate-400 leading-relaxed">Suspicious account recovery requests (password resets, mobile changes) are misused to hijack authentic profiles.</p>
+                        </div>
+
+                        <div className="p-3 bg-red-950/20 border border-red-900/30 rounded-xl space-y-1">
+                          <p className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                            <span className="w-4 h-4 rounded bg-red-900/30 text-[9px] flex items-center justify-center text-red-400 font-mono">6</span>
+                            Insider Threat Overreach
+                          </p>
+                          <p className="text-[10px] text-slate-400 leading-relaxed">Privileged bank employees can misuse access to customer records without immediate real-time authorization checks.</p>
+                        </div>
+
+                        <div className="p-3 bg-red-950/20 border border-red-900/30 rounded-xl space-y-1">
+                          <p className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                            <span className="w-4 h-4 rounded bg-red-900/30 text-[9px] flex items-center justify-center text-red-400 font-mono">7</span>
+                            Vulnerable Demographics
+                          </p>
+                          <p className="text-[10px] text-slate-400 leading-relaxed">Elderly, hospitalized, unconscious, or digitally less-aware customers cannot immediately recognize or respond to fraud.</p>
+                        </div>
+
+                        <div className="p-3 bg-red-950/20 border border-red-900/30 rounded-xl space-y-1">
+                          <p className="text-[11px] font-bold text-white flex items-center gap-1.5">
+                            <span className="w-4 h-4 rounded bg-red-900/30 text-[9px] flex items-center justify-center text-red-400 font-mono">8</span>
+                            Static High Friction
+                          </p>
+                          <p className="text-[10px] text-slate-400 leading-relaxed">One-size-fits-all security creates annoying friction for genuine users while still failing to stop sophisticated fraud syndicates.</p>
                         </div>
                       </div>
                     </div>
 
                     {/* Right SaaS comparison matrix */}
-                    <div className="lg:col-span-6 border border-slate-850 bg-slate-900/20 rounded-xl p-4 space-y-4">
+                    <div className="lg:col-span-5 border border-slate-850 bg-slate-900/20 rounded-xl p-4 space-y-4">
                       <div className="flex justify-between items-center pb-2 border-b border-slate-900">
                         <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider">Comparison Matrix</span>
                         <span className="text-[8px] font-mono text-cyan-400 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-900/30">Continuous Analytics</span>
@@ -550,11 +592,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchConsole }) => 
                 >
                   <div className="flex items-center gap-3 text-emerald-500">
                     <CheckCircle className="w-6 h-6 shrink-0" />
-                    <h3 className="text-xl font-bold font-outfit">The Solution: Sach Ka Kavach Security Architecture</h3>
+                    <h3 className="text-xl font-bold font-outfit">The Solution: Continuous Dynamic Scoring & Adaptive Interception</h3>
                   </div>
 
-                  <p className="text-xs text-slate-300 leading-relaxed max-w-4xl">
-                    We built <span className="text-white font-semibold">Sach Ka Kavach: Bharat Trust Grid</span>, a three-tier active security suite integrating an analytics console, a secure Express gateway, and a Python Flask ML microservice.
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="p-4 bg-emerald-950/10 border border-emerald-900/30 rounded-2xl space-y-2">
+                      <p className="font-bold text-emerald-400 text-xs font-mono uppercase tracking-wider">🚀 1. Continuous Dynamic Risk Scoring Engine</p>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Sach Ka Kavach continuously calculates a dynamic trust and risk score (0–100) based on keyboard biometrics, hardware fingerprinting, impossible geo-speed session hops, relationship clustering (Aadhaar & PAN networks), password reset triggers, and privilege lookup parameters. Critically, it incorporates human and situational safety variables to identify actions taken on accounts belonging to vulnerable, unconscious, or hospitalized demographics.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-blue-950/10 border border-blue-900/30 rounded-2xl space-y-2">
+                      <p className="font-bold text-blue-400 text-xs font-mono uppercase tracking-wider">🔒 2. Adaptive Shield & Step-up Interception</p>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        Instead of absolute locks, step-up verification metrics (OTP verification, Customer ID checks, trusted family Guardian authorizations, and automated mathematical sandbox delays) are triggered only when threat parameters exceed predefined thresholds. Genuine banking operations continue frictionless, while high-risk threats are isolated immediately in secure escrow locks.
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-400 leading-relaxed max-w-4xl pt-2">
+                    We built **Sach Ka Kavach: Bharat Trust Grid**, a complete three-tier continuous identity prototype integrating a React 19 visual console, an Express API gateway, and a Python Flask ML microservice.
                   </p>
 
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs font-sans">

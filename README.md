@@ -19,54 +19,91 @@ Traditional banking security structures suffer from fundamental flaws:
 
 ---
 
-## ⚙️ Our Detailed Solution (The Sach Ka Kavach Engine)
+## ⚙️ Our Solution: Detailed Module-Wise Breakdown
 
-Our platform addresses these vulnerabilities through a multi-dimensional approach:
-* **Continuous Dynamic Risk Scoring Engine**: Calculates real-time trust scores (0–100) based on keyboard biometrics, hardware fingerprinting, impossible geo-speed session hops, relationship clustering (Aadhaar & PAN networks), password reset triggers, and privilege lookup parameters. Critically, it incorporates human and situational safety variables to protect accounts belonging to vulnerable, unconscious, or hospitalized demographics.
-* **Adaptive Interception Policies**: Instead of absolute locks, step-up verification metrics (OTP verification, Customer ID checks, trusted family Guardian authorizations, and automated mathematical sandbox delays) are triggered only when threat parameters exceed predefined thresholds.
+**Sach Ka Kavach** addresses these challenges by implementing six modular security layers that continually calculate a dynamic trust score (0-100) and enforce adaptive security policies:
+
+### 1. Behavioral Anomaly Detection (M1)
+* **Goal**: Detects session takeovers by profiling how the user interacts with the system.
+* **Mechanism**: Captures micro-timing parameters (keystroke press durations and key flight intervals) on client inputs. Timings are evaluated in real-time by a Python **Isolation Forest** model to detect deviations from the customer's typing cadence baseline.
+* **Example**: A customer who usually transfers ₹5,000 suddenly attempts a ₹2,00,000 transfer at 3 AM. The engine detects both transaction and typing timing anomalies, immediately raising a high-risk alert.
+
+### 2. Device Trust Registry (M2)
+* **Goal**: Blocks unrecognized, automated, or spoofed devices from accessing accounts.
+* **Mechanism**: Gathers multi-signal telemetry parameters (OS headers, screen resolution, browser profiles, user agent fingerprints, and network proxy states) and evaluates them using a **Random Forest** classification model to identify emulators or device hijacking signatures.
+* **Example**: A login attempt from a new phone and browser brand is detected. The Device Trust Registry flags it as unrecognized, prompting the user for step-up verification before access is granted.
+
+### 3. Fraud Ring Detection (M3)
+* **Goal**: Discovers and intercepts synthetic KYC onboarding rings.
+* **Mechanism**: Constructs a relationship node graph tracking PAN, Aadhaar, device IDs, and IP addresses. The **Swarm KYC Graph Engine** clusters nodes to find accounts sharing matching hardware fingerprints or recovery nominees.
+* **Example**: Multiple bank accounts are created using the same mobile device ID and IP address. The graph engine immediately flags the overlapping clusters as a potential mule account network for manual verification.
+
+### 4. Account Recovery Risk Assessment (M4)
+* **Goal**: Secures the password and mobile number reset pipelines.
+* **Mechanism**: Creates a secure, isolated sandbox with dynamic delays and proof-of-work (PoW) computation tasks that slow down automated scripts.
+* **Example**: A password reset request is followed immediately by a request to change the primary mobile number from an unrecognized device. The system increases the account recovery risk score, pausing the process to notify the owner.
+
+### 5. Insider Threat Monitoring (M5)
+* **Goal**: Mitigates administrative database snooping and data exfiltration by bank staff.
+* **Mechanism**: Establishes a **Customer Consent Ticket** gateway. Bank employees are forbidden from querying user databases unless the customer has raised a support ticket and authorized it via an SMS OTP.
+* **Example**: A bank employee attempts to search and download hundreds of customer records outside working hours. The system immediately blocks the request and triggers a high-priority SOC alert to the manager.
+
+### 6. Real-Time Audit Ledger (M6)
+* **Goal**: Provides complete transparency, compliance, and post-incident investigation logs.
+* **Mechanism**: An immutable chronological log recording all system-level identity trust events, risk changes, verification results, and admin queries.
+* **Example**: Every login, transaction, risk score update, and security policy decision is logged with absolute timestamps, providing investigators with an auditable trial.
 
 ---
 
-## 📊 System Architecture & Data Flow
+## 📊 Detailed System Architecture
 
 ```mermaid
 graph TD
-    %% Styling
-    classDef default fill:#0d1527,stroke:#1e293b,stroke-width:1px,color:#cbd5e1;
-    classDef client fill:#1e1b4b,stroke:#312e81,stroke-width:1.5px,color:#a5b4fc;
-    classDef gateway fill:#062033,stroke:#083344,stroke-width:1.5px,color:#22d3ee;
-    classDef ml fill:#141b2b,stroke:#022c22,stroke-width:1.5px,color:#34d399;
+    classDef client fill:#1e1b4b,stroke:#312e81,stroke-width:1px,color:#cbd5e1;
+    classDef gateway fill:#062033,stroke:#083344,stroke-width:1px,color:#22d3ee;
+    classDef ml fill:#141b2b,stroke:#022c22,stroke-width:1px,color:#34d399;
+    classDef storage fill:#1c1917,stroke:#44403c,stroke-width:1px,color:#f5f5f4;
 
-    subgraph ClientTier ["Client Tier (React 19 Console)"]
-        A["Dashboard & Telemetry HUD"]:::client
-        B["Hacker Delay sandbox timers"]:::client
+    subgraph Presentation ["1. CLIENT PRESENTATION LAYER (React 19 Console)"]
+        UI["Visual Command HUD & Threat Analytics Console"]:::client
+        HACK["Hacker Delay sandbox mathematical POW delayers"]:::client
+        OTPL["Dynamic step-up authentication panels"]:::client
     end
 
-    subgraph GatewayTier ["Gateway Tier (Express API Server)"]
-        API["Node.js Express App"]:::gateway
-        DB[("MongoDB Atlas")]:::gateway
-        SIO["Socket.io Event Broker"]:::gateway
+    subgraph AccessGateway ["2. ACCESS CONTROLLERS & EVENT BROKER (Express API Gateway)"]
+        EX["Express Node.js REST API Endpoint Controller"]:::gateway
+        AUTH["JWT Identity Validation Filter Middleware"]:::gateway
+        SOCK["Socket.io Pub-Sub Event Broker Pipeline"]:::gateway
     end
 
-    subgraph MLTier ["AI/ML Tier (Flask Microservice)"]
-        ML["Flask Predict App"]:::ml
-        M1["Keystroke Dynamics (Isolation Forest)"]:::ml
-        M2["Device Fingerprints (Random Forest)"]:::ml
-        M3["Swarm Node KYC relationship graph"]:::ml
-        LLM["xAI Grok Dynamic Explainer"]:::ml
+    subgraph Intelligence ["3. INTELLIGENCE & TELEMETRY LAYER (Python Flask ML Engine)"]
+        FLASK["Flask Python Predict Microservice"]:::ml
+        M1["Behavioral Biometrics (Keystroke timings via Isolation Forest)"]:::ml
+        M2["Device Trust Registry (OS Emulators via Random Forest)"]:::ml
+        M3["Swarm Node Graph KYC (Aadhaar PAN Node Relationship Graph)"]:::ml
+        M4["Secure Recovery Shield (POW time delay calculation)"]:::ml
+        M5["Insider Threat Detector (Support Ticket consent verifier)"]:::ml
+        AI["Dynamic AI Explainer (xAI Grok Dynamic explanations)"]:::ml
     end
 
-    %% Connections
-    A -->|1. Real-time typing dynamics| API
-    A -->|2. Device OS/Emulator metrics| API
-    A -->|3. Nominee KYC networks| API
-    API -->|4. Store Event logs| DB
-    API -->|5. Broadcast SOC Alerts| SIO
-    API -->|6. JSON vector payload| ML
-    ML --> M1
-    ML --> M2
-    ML --> M3
-    API -->|7. Generate Explanation| LLM
+    subgraph DataStorage ["4. PERSISTENT IDENTITY STORAGE LAYER"]
+        MONGO[("MongoDB Atlas Cloud Database Clusters")]:::storage
+    end
+
+    %% Flows
+    UI -->|Telemetry JSON payload| AUTH
+    AUTH -->|Validated Requests| EX
+    EX -->|Internal REST API query| FLASK
+    EX -->|Broker Real-time alerts| SOCK
+    SOCK -->|Websocket Alert notifications| UI
+    EX -->|Queries & Operations| MONGO
+
+    FLASK --> M1
+    FLASK --> M2
+    FLASK --> M3
+    FLASK --> M4
+    FLASK --> M5
+    FLASK --> AI
 ```
 
 ---
@@ -106,11 +143,11 @@ graph LR
 
 * **Chitra Saini** (Team Leader) 
   * **Role**: Frontend Architecture & Onboarding UX
-  * **Gmail**: [chitrasaini.dev@gmail.com](mailto:chitrasaini.dev@gmail.com)
+  * **Gmail**: [chitra24279@gmail.com](mailto:chitra24279@gmail.com)
   
 * **Abhyuday Jain** 
   * **Role**: Backend Services & Escrow Security Pipelines
-  * **Gmail**: [abhyudayjain.security@gmail.com](mailto:abhyudayjain.security@gmail.com)
+  * **Gmail**: [abhyuday.23it616@rtu.ac.in](mailto:abhyuday.23it616@rtu.ac.in)
   
 * **Hardik Mathur** 
   * **Role**: Machine Learning Models & System Integrations
