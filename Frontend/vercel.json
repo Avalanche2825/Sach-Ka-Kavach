@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://sach-kavach-backend.onrender.com/api/:path*"
+      "destination": "https://sach-ka-kavach.onrender.com/api/:path*"
     }
   ]
 }
