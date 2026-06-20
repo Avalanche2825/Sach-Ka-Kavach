@@ -18,9 +18,9 @@ import AuditLedgerViewer from "./components/AuditLedgerViewer.tsx";
 import IdentityAnalyticsDashboard from "./components/IdentityAnalyticsDashboard.tsx";
 import LandingPage from "./components/LandingPage.tsx";
 import LoginPage from "./components/LoginPage.tsx";
-import Sidebar from "./components/layout/Sidebar.tsx";
-import TopBar from "./components/layout/TopBar.tsx";
+import Navbar from "./components/layout/Navbar.tsx";
 import HackerDelayLayer from "./components/HackerDelayLayer.tsx";
+
 
 import { motion, AnimatePresence } from "motion/react";
 
@@ -256,29 +256,22 @@ function AppRoutes() {
         path="*"
         element={
           user ? (
-            <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 antialiased overflow-hidden">
-              {/* Collapsible Left Sidebar */}
-              <Sidebar
+            <div className="flex flex-col h-screen bg-[#f8fafc] font-sans text-slate-900 antialiased overflow-hidden">
+              {/* Global Top Navbar */}
+              <Navbar
                 user={user}
                 onLogout={() => {
                   setUser(null);
                   localStorage.removeItem("sach_user");
                   navigate("/");
                 }}
+                customers={customers}
+                transactions={transactions}
+                auditLogs={auditLogs}
               />
 
-              {/* Layout Content Wrapper */}
-              <div className="flex-1 flex flex-col h-full overflow-hidden">
-                {/* Global Metrics and Notifications HUD Header */}
-                <TopBar
-                  customers={customers}
-                  transactions={transactions}
-                  auditLogs={auditLogs}
-                  user={user}
-                />
-
-                {/* Sub-view Viewport Panel with animation */}
-                <main className="flex-1 overflow-y-auto p-8 scrollbar-thin bg-slate-50/50">
+              {/* Sub-view Viewport Panel with scroll */}
+              <main className="flex-1 overflow-y-auto p-4 md:p-8 scrollbar-thin bg-slate-50/50">
                   <Routes>
                     <Route
                       path="/dashboard"
@@ -363,12 +356,11 @@ function AppRoutes() {
                   </Routes>
                 </main>
               </div>
-            </div>
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
     </Routes>
   );
 }

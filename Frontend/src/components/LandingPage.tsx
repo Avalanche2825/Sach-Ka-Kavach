@@ -20,7 +20,8 @@ import {
   Info,
   Terminal,
   ArrowUpRight,
-  ShieldX
+  ShieldX,
+  Menu
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -35,6 +36,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchConsole }) => 
   const [sliderKeystroke, setSliderKeystroke] = useState<boolean>(false);
   const [sliderGeo, setSliderGeo] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'problem' | 'understanding' | 'solution'>('problem');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
 
   // Telemetry logs state
   const [tickerLogs, setTickerLogs] = useState<string[]>([]);
@@ -77,7 +80,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchConsole }) => 
 
   const teamMembers = [
     { name: "Chitra Saini (Leader)", initial: "CS" },
-    { name: "Abhiudhay Jain", initial: "AJ" },
+    { name: "Abhyuday Jain", initial: "AJ" },
     { name: "Hardik Mathur", initial: "HM" },
     { name: "Siddharth Raut", initial: "SR" }
   ];
@@ -156,7 +159,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchConsole }) => 
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-6">
             <a href="#about" className="text-xs font-bold text-slate-400 hover:text-white transition">About System</a>
             <a href="#features" className="text-xs font-bold text-slate-400 hover:text-white transition">6 Layers</a>
             <a href="#team" className="text-xs font-bold text-slate-400 hover:text-white transition">Our Team</a>
@@ -169,8 +173,63 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLaunchConsole }) => 
               <ArrowRight className="w-3.5 h-3.5 animate-pulse" />
             </button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden items-center">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-slate-400 hover:text-white transition cursor-pointer"
+              title="Toggle Menu"
+            >
+              {mobileMenuOpen ? <ShieldX className="w-6 h-6 text-saffron-550" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </header>
+
+      {/* Mobile Navigation Dropdown */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-b border-slate-900 bg-slate-950/95 backdrop-blur-md px-6 py-4 flex flex-col gap-4 relative z-40"
+          >
+            <a 
+              href="#about" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-sm font-bold text-slate-400 hover:text-white py-1 transition"
+            >
+              About System
+            </a>
+            <a 
+              href="#features" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-sm font-bold text-slate-400 hover:text-white py-1 transition"
+            >
+              6 Layers
+            </a>
+            <a 
+              href="#team" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-sm font-bold text-slate-400 hover:text-white py-1 transition"
+            >
+              Our Team
+            </a>
+            <button 
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onLaunchConsole();
+              }}
+              className="w-full py-3 text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl transition duration-200 text-center flex items-center justify-center gap-1.5 cursor-pointer border border-blue-500/25"
+            >
+              Authorization Portal (Console)
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-16 pb-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
