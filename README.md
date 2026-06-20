@@ -113,5 +113,5 @@ SACH Kavach evaluates transactions in real-time, mapping them to the following a
 ## 🌐 Active Deployments
 
 * **Production Frontend**: [https://sach-kavach-grid.vercel.app](https://sach-kavach-grid.vercel.app)
-* **Production API Backend**: [https://sach-kavach-backend.onrender.com](https://sach-kavach-backend.onrender.com)
-* **Production ML Service**: Hosted on Render private networks linked directly to the API Backend.
+* **Production API Backend**: [https://sach-ka-kavach.onrender.com](https://sach-ka-kavach.onrender.com)
+* **Production ML Service**: [https://sach-kavach-ml-service.onrender.com](https://sach-kavach-ml-service.onrender.com) (Health endpoint at `/health`)
