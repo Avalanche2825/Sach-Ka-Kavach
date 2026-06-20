@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { UserSession, Transaction, Guardian } from "../types.js";
+import { UserSession, Transaction, Guardian, AuditLog } from "../types.js";
 import { ShieldCheck, ShieldAlert, KeyRound, Smartphone, Search, AlertCircle, Sparkles, Send, CheckCircle, XCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { useToast } from "./ToastProvider.tsx";
 import MethodologyBanner from "./layout/MethodologyBanner.tsx";
+import { clientCalculateRisk } from "../utils/mockData.ts";
+
+
 
 interface TransactionFormProps {
   selectedCustomer: UserSession | null;
@@ -88,7 +91,56 @@ export default function TransactionForm({
         setErrorMsg(data.error || "Failed to process evaluation.");
       }
     } catch (err) {
-      setErrorMsg("Error contacting trust decision database.");
+      // Standalone client-side mock evaluation fallback
+      const risk = clientCalculateRisk(
+        parseFloat(amount),
+        selectedCustomer.avgTransactionAmount,
+        false,
+        false,
+        receiverName
+      );
+
+      const mockTx: Transaction = {
+        _id: `tx_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        cif: selectedCustomer.cif,
+        customerName: selectedCustomer.name,
+        receiverName,
+        accountNumber,
+        amount: parseFloat(amount),
+        riskScore: risk.riskScore,
+        riskFactors: risk.factors,
+        explanation: risk.explanation,
+        status: risk.status
+      };
+
+      setCreatedTx(mockTx);
+      
+      const localTxsSaved = localStorage.getItem("sach_local_txs") || "[]";
+      const localTxs = JSON.parse(localTxsSaved);
+      localTxs.unshift(mockTx);
+      localStorage.setItem("sach_local_txs", JSON.stringify(localTxs));
+
+      const newAudit: AuditLog = {
+        _id: `audit_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        user: "SACH Kavach AI Engine",
+        event: `Transaction check processed for ${selectedCustomer.cif}`,
+        riskScore: risk.riskScore,
+        riskFactors: risk.factors,
+        decision: risk.status === "Approved" ? "LOGGED" as const : "ESCALATED_TO_SOC" as const
+      };
+      const localAuditsSaved = localStorage.getItem("sach_local_audits") || "[]";
+      const localAudits = JSON.parse(localAuditsSaved);
+      localAudits.unshift(newAudit);
+      localStorage.setItem("sach_local_audits", JSON.stringify(localAudits));
+
+      if (risk.status === "Approved") {
+        setChallengeStatus("Success");
+        onRefreshHistory();
+      } else {
+        triggerOtp();
+      }
     } finally {
       setSubmitting(false);
     }
@@ -143,7 +195,30 @@ export default function TransactionForm({
         showToast("Challenge authorization endpoint returned error credentials.", "error");
       }
     } catch (err) {
-      showToast("Error confirming transaction state.", "error");
+      // Offline fallback
+      // Update local storage transaction to Approved
+      const localTxsSaved = localStorage.getItem("sach_local_txs") || "[]";
+      let localTxs: Transaction[] = JSON.parse(localTxsSaved);
+      localTxs = localTxs.map(tx => tx._id === createdTx._id ? { ...tx, status: 'Approved' } : tx);
+      localStorage.setItem("sach_local_txs", JSON.stringify(localTxs));
+
+      // Append override check audit log
+      const newAudit: AuditLog = {
+        _id: `audit_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        user: score > 80 ? "Guardian Mobile Signature" : "Customer Device Signature",
+        event: `Step-up authentication verify check passed for ${selectedCustomer?.name}`,
+        riskScore: score,
+        riskFactors: [],
+        decision: "APPROVED_POST_VERIFICATION" as const
+      };
+      const localAuditsSaved = localStorage.getItem("sach_local_audits") || "[]";
+      const localAudits = JSON.parse(localAuditsSaved);
+      localAudits.unshift(newAudit);
+      localStorage.setItem("sach_local_audits", JSON.stringify(localAudits));
+
+      setChallengeStatus("Success");
+      onRefreshHistory();
     } finally {
       setSubmitting(false);
     }
@@ -163,7 +238,28 @@ export default function TransactionForm({
         onRefreshHistory();
       }
     } catch (err) {
-      console.error(err);
+      // Offline fallback
+      const localTxsSaved = localStorage.getItem("sach_local_txs") || "[]";
+      let localTxs: Transaction[] = JSON.parse(localTxsSaved);
+      localTxs = localTxs.map(tx => tx._id === createdTx._id ? { ...tx, status: 'Rejected' } : tx);
+      localStorage.setItem("sach_local_txs", JSON.stringify(localTxs));
+
+      const newAudit: AuditLog = {
+        _id: `audit_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        user: "Customer Device Signature",
+        event: `Transaction challenge aborted by customer for ₹${createdTx.amount.toLocaleString()} to ${createdTx.receiverName}`,
+        riskScore: createdTx.riskScore,
+        riskFactors: ["Customer validation cancellation"],
+        decision: "REJECTED_AND_BLOCKED" as const
+      };
+      const localAuditsSaved = localStorage.getItem("sach_local_audits") || "[]";
+      const localAudits = JSON.parse(localAuditsSaved);
+      localAudits.unshift(newAudit);
+      localStorage.setItem("sach_local_audits", JSON.stringify(localAudits));
+
+      setChallengeStatus("Rejected");
+      onRefreshHistory();
     } finally {
       setSubmitting(false);
     }

@@ -19,7 +19,19 @@ import IdentityAnalyticsDashboard from "./components/IdentityAnalyticsDashboard.
 import LandingPage from "./components/LandingPage.tsx";
 import LoginPage from "./components/LoginPage.tsx";
 import Navbar from "./components/layout/Navbar.tsx";
+import Sidebar from "./components/layout/Sidebar.tsx";
+import TopBar from "./components/layout/TopBar.tsx";
 import HackerDelayLayer from "./components/HackerDelayLayer.tsx";
+
+import {
+  getInitialCustomers,
+  getInitialGuardians,
+  getInitialTransactions,
+  getInitialKYCApplications,
+  getInitialEmployeeLogs,
+  getInitialAuditLogs
+} from "./utils/mockData.ts";
+
 
 
 import { motion, AnimatePresence } from "motion/react";
@@ -41,13 +53,14 @@ function AppRoutes() {
     return saved ? JSON.parse(saved) : null;
   });
 
-  // Domain states
-  const [customers, setCustomers] = useState<UserSession[]>([]);
+  // Domain states (Pre-seeded for robust offline demo!)
+  const [customers, setCustomers] = useState<UserSession[]>(getInitialCustomers);
   const [selectedCustomer, setSelectedCustomer] = useState<UserSession | null>(null);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [kycApps, setKycApps] = useState<KYCApplication[]>([]);
-  const [employeeLogs, setEmployeeLogs] = useState<EmployeeLog[]>([]);
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>(() => getInitialTransactions(getInitialCustomers()));
+  const [kycApps, setKycApps] = useState<KYCApplication[]>(getInitialKYCApplications);
+  const [employeeLogs, setEmployeeLogs] = useState<EmployeeLog[]>(getInitialEmployeeLogs);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(getInitialAuditLogs);
+  const [guardians, setGuardians] = useState<Guardian[]>(getInitialGuardians);
   const [guardian, setGuardian] = useState<Guardian | null>(null);
 
   const [loading, setLoading] = useState(false);
@@ -84,7 +97,8 @@ function AppRoutes() {
         if (fresh) setSelectedCustomer(fresh);
       }
     } catch (err) {
-      console.error("Error loading server-side datasets:", err);
+      console.warn("Express API Server offline. Operating in client-side Standalone Demo mode.", err);
+      // Fallback: local states are already pre-seeded and active!
     } finally {
       setLoading(false);
     }
@@ -107,14 +121,15 @@ function AppRoutes() {
           const data = await res.json();
           setGuardian(data);
         } else {
-          setGuardian(null);
+          throw new Error("No guardian found");
         }
       } catch (err) {
-        setGuardian(null);
+        const localG = guardians.find(g => g.cif === selectedCustomer.cif);
+        setGuardian(localG || null);
       }
     };
     fetchGuardian();
-  }, [selectedCustomer]);
+  }, [selectedCustomer, guardians]);
 
   // --- CALL INTERACTION WRAPPERS ---
 
@@ -134,9 +149,18 @@ function AppRoutes() {
         const freshGuardian = await res.json();
         setGuardian(freshGuardian);
         fetchAllData();
+        return;
       }
+      throw new Error("offline");
     } catch (err) {
-      console.error(err);
+      const newGuardian: Guardian = {
+        cif: selectedCustomer.cif,
+        guardianName: gName,
+        relationship,
+        phone
+      };
+      setGuardians(prev => [...prev.filter(g => g.cif !== selectedCustomer.cif), newGuardian]);
+      setGuardian(newGuardian);
     }
   };
 
@@ -150,9 +174,37 @@ function AppRoutes() {
       });
       if (res.ok) {
         fetchAllData();
+        return;
       }
+      throw new Error("offline");
     } catch (err) {
-      console.error(err);
+      const isSuspicious = app.aadhaar?.startsWith("9999");
+      const newApp: KYCApplication = {
+        _id: `kyc_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        name: app.name,
+        aadhaar: app.aadhaar,
+        pan: app.pan,
+        deviceFingerprint: app.deviceFingerprint || "DEV_FING_999",
+        ipAddress: app.ipAddress || "103.88.24.10",
+        status: isSuspicious ? "Flagged" : "Approved",
+        suspiciousMatches: isSuspicious 
+          ? ["Device fingerprint or Aadhaar matches suspicious database entries"] 
+          : []
+      };
+      setKycApps(prev => [newApp, ...prev]);
+
+      // Log KYC audit
+      const newAudit: AuditLog = {
+        _id: `audit_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        user: "Identity Manager Desk",
+        event: `KYC Registration request evaluated for ${app.name}`,
+        riskScore: isSuspicious ? 95 : 5,
+        riskFactors: isSuspicious ? ["Shared device footprint flag"] : [],
+        decision: isSuspicious ? "REJECTED_AND_BLOCKED" : "APPROVED_POST_VERIFICATION"
+      };
+      setAuditLogs(prev => [newAudit, ...prev]);
     } finally {
       setLoading(false);
     }
@@ -173,8 +225,42 @@ function AppRoutes() {
         return { success: false, error: data.error || "Action blocked by security policies." };
       }
     } catch (err) {
-      console.error(err);
-      return { success: false, error: "Network error contacting security gateway." };
+      const ticketKey = `sach_ticket_${logPayload.customerCIF}`;
+      const ticket = localStorage.getItem(ticketKey);
+      
+      const isAuthorized = ticket === "AUTHORIZED" || logPayload.employeeId === "EMP103";
+      
+      const newLog: EmployeeLog = {
+        _id: `emp_log_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        employeeId: logPayload.employeeId,
+        employeeName: logPayload.employeeId === "EMP103" ? "Mohit Verma (DB Admin)" : "Branch Staff",
+        action: logPayload.action,
+        customerCIF: logPayload.customerCIF,
+        outsideHours: new Date().getHours() < 9 || new Date().getHours() > 18,
+        actionRiskScore: isAuthorized ? 15 : 100,
+        managerApproved: isAuthorized,
+        requiresManagerApproval: !isAuthorized
+      };
+
+      setEmployeeLogs(prev => [newLog, ...prev]);
+
+      const newAudit: AuditLog = {
+        _id: `audit_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        user: logPayload.employeeId,
+        event: `${logPayload.action} request for ${logPayload.customerCIF}`,
+        riskScore: isAuthorized ? 15 : 100,
+        riskFactors: isAuthorized ? [] : ["Access denied - No active customer OTP ticket"],
+        decision: isAuthorized ? "APPROVED_POST_VERIFICATION" : "REJECTED_AND_BLOCKED"
+      };
+      setAuditLogs(prev => [newAudit, ...prev]);
+
+      if (isAuthorized) {
+        return { success: true };
+      } else {
+        return { success: false, error: "Access Denied: No active authorized customer OTP support ticket exists for this inquiry. Security alarm logged." };
+      }
     }
   };
 
@@ -185,9 +271,11 @@ function AppRoutes() {
       });
       if (res.ok) {
         fetchAllData();
+        return;
       }
+      throw new Error("offline");
     } catch (err) {
-      console.error(err);
+      setEmployeeLogs(prev => prev.map(log => log._id === id ? { ...log, managerApproved: true, requiresManagerApproval: false } : log));
     }
   };
 
@@ -200,9 +288,23 @@ function AppRoutes() {
       });
       if (res.ok) {
         fetchAllData();
+        return;
       }
+      throw new Error("offline");
     } catch (err) {
-      console.error(err);
+      setTransactions(prev => prev.map(tx => tx._id === id ? { ...tx, status: 'Approved' } : tx));
+      
+      const targetTx = transactions.find(t => t._id === id);
+      const newAudit: AuditLog = {
+        _id: `audit_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        user: "Guardian Mobile Signature",
+        event: `Guardian approved escrow transfer of ₹${targetTx?.amount.toLocaleString()} to ${targetTx?.receiverName}`,
+        riskScore: 10,
+        riskFactors: [],
+        decision: "APPROVED_POST_VERIFICATION"
+      };
+      setAuditLogs(prev => [newAudit, ...prev]);
     }
   };
 
@@ -215,9 +317,23 @@ function AppRoutes() {
       });
       if (res.ok) {
         fetchAllData();
+        return;
       }
+      throw new Error("offline");
     } catch (err) {
-      console.error(err);
+      setTransactions(prev => prev.map(tx => tx._id === id ? { ...tx, status: 'Rejected' } : tx));
+      
+      const targetTx = transactions.find(t => t._id === id);
+      const newAudit: AuditLog = {
+        _id: `audit_mock_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        user: "Guardian Mobile Signature",
+        event: `Guardian rejected escrow transfer of ₹${targetTx?.amount.toLocaleString()} to ${targetTx?.receiverName}`,
+        riskScore: 90,
+        riskFactors: ["Guardian rejection sign-off"],
+        decision: "REJECTED_AND_BLOCKED"
+      };
+      setAuditLogs(prev => [newAudit, ...prev]);
     }
   };
 
@@ -256,22 +372,48 @@ function AppRoutes() {
         path="*"
         element={
           user ? (
-            <div className="flex flex-col h-screen bg-[#f8fafc] font-sans text-slate-900 antialiased overflow-hidden">
-              {/* Global Top Navbar */}
-              <Navbar
-                user={user}
-                onLogout={() => {
-                  setUser(null);
-                  localStorage.removeItem("sach_user");
-                  navigate("/");
-                }}
-                customers={customers}
-                transactions={transactions}
-                auditLogs={auditLogs}
-              />
+            <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 antialiased overflow-hidden">
+              {/* Collapsible Left Sidebar - Desktop only */}
+              <div className="hidden md:flex h-full shrink-0">
+                <Sidebar
+                  user={user}
+                  onLogout={() => {
+                    setUser(null);
+                    localStorage.removeItem("sach_user");
+                    navigate("/");
+                  }}
+                />
+              </div>
 
-              {/* Sub-view Viewport Panel with scroll */}
-              <main className="flex-1 overflow-y-auto p-4 md:p-8 scrollbar-thin bg-slate-50/50">
+              {/* Mobile Top Navbar - Mobile only */}
+              <div className="block md:hidden w-full fixed top-0 left-0 right-0 z-50">
+                <Navbar
+                  user={user}
+                  onLogout={() => {
+                    setUser(null);
+                    localStorage.removeItem("sach_user");
+                    navigate("/");
+                  }}
+                  customers={customers}
+                  transactions={transactions}
+                  auditLogs={auditLogs}
+                />
+              </div>
+
+              {/* Layout Content Wrapper */}
+              <div className="flex-1 flex flex-col h-full overflow-hidden pt-16 md:pt-0">
+                {/* Global Metrics Header - Desktop only */}
+                <div className="hidden md:block w-full">
+                  <TopBar
+                    customers={customers}
+                    transactions={transactions}
+                    auditLogs={auditLogs}
+                    user={user}
+                  />
+                </div>
+
+                {/* Sub-view Viewport Panel with scroll */}
+                <main className="flex-1 overflow-y-auto p-4 md:p-8 scrollbar-thin bg-slate-50/50">
                   <Routes>
                     <Route
                       path="/dashboard"
@@ -356,6 +498,7 @@ function AppRoutes() {
                   </Routes>
                 </main>
               </div>
+            </div>
             ) : (
               <Navigate to="/login" replace />
             )
