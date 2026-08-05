@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+**/node_modules/
+
+# Build and distribution files
+dist/
+**/dist/
+build/
+**/build/
+
+# Environment configurations and secrets
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Python caches and virtual environments
+__pycache__/
+**/__pycache__/
+*.pyc
+venv/
+.venv/
+env/
+.env/
+
+# Operating system files
+.DS_Store
+Thumbs.db

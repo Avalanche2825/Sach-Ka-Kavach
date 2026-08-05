@@ -1,0 +1,6 @@
+{
+  "name": "Sach Ka Kavach",
+  "description": "Continuous Identity Trust Engine for banking cybersecurity: detects fraud, device risk, account takeover, duplicate KYC, recovery actions, and insider threats.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,15 @@
+export type KycDemoLog = { _id: string; name: string; aadhaar: string; pan: string; deviceFingerprint: string; ipAddress: string; status: 'Flagged' | 'Review'; clusterId: string; linkedApplicants: string[]; linkage: string };
+
+// The graph renders only the people in linkedApplicants for the selected log.
+export const KYC_DEMO_LOGS: KycDemoLog[] = [
+  { _id: 'KYC-1001', name: 'Aarav Sharma', aadhaar: 'HASH-11029', pan: 'HASH-99127', deviceFingerprint: 'fp-a6b9c8d7', ipAddress: '105.221.44.12', status: 'Flagged', clusterId: '702', linkedApplicants: ['Aarav Sharma', 'Kiran B.', 'Meera Joshi'], linkage: 'Shared PAN hash and Android fingerprint' },
+  { _id: 'KYC-1002', name: 'Kiran B.', aadhaar: 'HASH-52781', pan: 'HASH-99127', deviceFingerprint: 'fp-a6b9c8d7', ipAddress: '105.221.44.18', status: 'Flagged', clusterId: '702', linkedApplicants: ['Aarav Sharma', 'Kiran B.', 'Meera Joshi'], linkage: 'Shared PAN hash and Android fingerprint' },
+  { _id: 'KYC-1003', name: 'Meera Joshi', aadhaar: 'HASH-77812', pan: 'HASH-40166', deviceFingerprint: 'fp-a6b9c8d7', ipAddress: '105.221.44.33', status: 'Review', clusterId: '702', linkedApplicants: ['Aarav Sharma', 'Kiran B.', 'Meera Joshi'], linkage: 'Shared device fingerprint' },
+  { _id: 'KYC-1004', name: 'Priya Patel', aadhaar: 'HASH-11029', pan: 'HASH-55300', deviceFingerprint: 'fp-win-emu', ipAddress: '185.220.10.8', status: 'Flagged', clusterId: '301', linkedApplicants: ['Priya Patel', 'Satish Kumar'], linkage: 'Shared Aadhaar hash and emulator' },
+  { _id: 'KYC-1005', name: 'Satish Kumar', aadhaar: 'HASH-11029', pan: 'HASH-88012', deviceFingerprint: 'fp-win-emu', ipAddress: '185.220.10.9', status: 'Flagged', clusterId: '301', linkedApplicants: ['Priya Patel', 'Satish Kumar'], linkage: 'Shared Aadhaar hash and emulator' },
+  { _id: 'KYC-1006', name: 'Rohan Verma', aadhaar: 'HASH-22041', pan: 'HASH-72601', deviceFingerprint: 'fp-redmi-77x', ipAddress: '192.168.52.4', status: 'Flagged', clusterId: '405', linkedApplicants: ['Rohan Verma', 'Vansh Shah'], linkage: 'Shared hardware fingerprint' },
+  { _id: 'KYC-1007', name: 'Vansh Shah', aadhaar: 'HASH-98012', pan: 'HASH-37004', deviceFingerprint: 'fp-redmi-77x', ipAddress: '192.168.52.9', status: 'Flagged', clusterId: '405', linkedApplicants: ['Rohan Verma', 'Vansh Shah'], linkage: 'Shared hardware fingerprint' },
+  { _id: 'KYC-1008', name: 'Nisha Rao', aadhaar: 'HASH-41922', pan: 'HASH-77528', deviceFingerprint: 'fp-ios-16af', ipAddress: '49.36.118.2', status: 'Review', clusterId: '618', linkedApplicants: ['Nisha Rao'], linkage: 'No named cross-account link' },
+  { _id: 'KYC-1009', name: 'Dev Malhotra', aadhaar: 'HASH-90214', pan: 'HASH-88190', deviceFingerprint: 'fp-pixel-41c', ipAddress: '103.19.71.6', status: 'Review', clusterId: '619', linkedApplicants: ['Dev Malhotra'], linkage: 'No named cross-account link' },
+  { _id: 'KYC-1010', name: 'Isha Kapoor', aadhaar: 'HASH-33419', pan: 'HASH-11963', deviceFingerprint: 'fp-samsung-c2a', ipAddress: '117.218.3.11', status: 'Review', clusterId: '620', linkedApplicants: ['Isha Kapoor'], linkage: 'No named cross-account link' },
+];

@@ -1,0 +1,306 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+/* ── CSS Design Tokens ─────────────────────────────────────────────────── */
+:root {
+  /* Page & Card */
+  --bg-page:            #F5F7FB;
+  --bg-card:            #FFFFFF;
+  --border-card:        #E3E8F2;
+  --shadow-card:        0 8px 24px rgba(30, 41, 59, 0.06);
+  --radius-card:        16px;
+
+  /* Primary navy */
+  --navy:               #1B2B6B;
+  --navy-hover:         #14225A;
+  --navy-light:         #EEF2FF;
+
+  /* Risk colors */
+  --risk-critical:      #DC2626;
+  --risk-high:          #EA580C;
+  --risk-medium:        #D97706;
+  --risk-low:           #16A34A;
+
+  /* Text */
+  --text-primary:       #0F172A;
+  --text-secondary:     #475569;
+  --text-muted:         #718096;
+
+  /* Sidebar */
+  --sidebar-bg:         #0F1729;
+  --sidebar-active:     #F97316;
+}
+
+/* ── Global Reset ──────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-size: 112.5% !important;
+}
+
+body {
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.5;
+  font-size: 16px; /* Base standard pixel fallback scaled from 14px */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+}
+
+button, input, select, textarea { font: inherit; }
+
+/* Keep monospacing only for deliberate machine data, not whole pages. */
+.font-mono { font-family: 'Manrope', sans-serif !important; letter-spacing: 0.01em; }
+
+/* ── Typography Utilities ──────────────────────────────────────────────── */
+.font-mono-data {
+  font-family: 'DM Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.label-caps {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Card System ───────────────────────────────────────────────────────── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px 24px;
+}
+
+.card-hover {
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.card-hover:hover {
+  box-shadow: 0 14px 30px rgba(30, 41, 59, 0.10);
+  border-color: #C7D2E4;
+  transform: translateY(-1px);
+}
+
+/* ── Button System ─────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 9px 16px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--navy);
+  color: #ffffff;
+}
+.btn-primary:hover { background: var(--navy-hover); }
+
+.btn-secondary {
+  background: #ffffff;
+  color: var(--navy);
+  border: 1.5px solid var(--navy);
+}
+.btn-secondary:hover { background: var(--navy-light); }
+
+.btn-danger {
+  background: var(--risk-critical);
+  color: #ffffff;
+}
+.btn-danger:hover { background: #B91C1C; }
+
+.btn-success {
+  background: #16A34A;
+  color: #ffffff;
+}
+.btn-success:hover { background: #15803D; }
+
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid #E2E8F0;
+}
+.btn-ghost:hover { background: #F8FAFC; }
+
+.btn-sm { font-size: 13.5px; padding: 6px 12px; }
+.btn-lg { font-size: 16.5px; padding: 12px 20px; }
+
+/* ── Risk Score Badges ─────────────────────────────────────────────────── */
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 3px 8px;
+  border: 1px solid;
+  white-space: nowrap;
+  font-family: 'Manrope', sans-serif;
+}
+
+.risk-critical { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+.risk-high     { background: #FFF7ED; color: #EA580C; border-color: #FED7AA; }
+.risk-medium   { background: #FFFBEB; color: #D97706; border-color: #FDE68A; }
+.risk-low      { background: #F0FDF4; color: #16A34A; border-color: #BBF7D0; }
+
+/* ── Signal Badges ─────────────────────────────────────────────────────── */
+.signal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 500;
+  border-radius: 20px;
+  padding: 3px 10px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.signal-emulator   { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+.signal-vpn        { background: #FFF7ED; color: #EA580C; border-color: #FED7AA; }
+.signal-datacenter { background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE; }
+.signal-sim        { background: #FFF7ED; color: #EA580C; border-color: #FED7AA; }
+.signal-untrusted  { background: #F5F3FF; color: #6D28D9; border-color: #DDD6FE; }
+.signal-trusted    { background: #F0FDF4; color: #15803D; border-color: #BBF7D0; }
+.signal-new-device { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+.signal-geo        { background: #FFF7ED; color: #EA580C; border-color: #FED7AA; }
+.signal-neutral    { background: #F8FAFC; color: #64748B; border-color: #E2E8F0; }
+
+/* ── Scrollbars ────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 99px; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* ── Animations ────────────────────────────────────────────────────────── */
+.page-enter { animation: fadeInUp 0.15s ease-out; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+.live-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: #16A34A;
+  border-radius: 50%;
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* ── SOC Sidebar Active State ──────────────────────────────────────────── */
+.soc-nav-active {
+  color: #F97316 !important;
+  background: rgba(249, 115, 22, 0.1);
+  border-left: 3px solid #F97316;
+}
+
+.soc-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #94A3B8;
+  transition: all 0.12s ease;
+  cursor: pointer;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  margin-left: -3px;
+}
+.soc-nav-item:hover {
+  color: #E2E8F0;
+  background: rgba(255,255,255,0.06);
+}
+
+/* ── Table ─────────────────────────────────────────────────────────────── */
+.data-table { width: 100%; text-align: left; border-collapse: collapse; }
+.data-table th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 10px 16px;
+  background: #F8F9FB;
+  border-bottom: 1px solid var(--border-card);
+}
+.data-table td {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-primary);
+  border-bottom: 1px solid #F1F5F9;
+}
+.data-table tr:hover td { background: #F8FAFD; }
+.data-table tr:last-child td { border-bottom: none; }
+
+/* ── Input ─────────────────────────────────────────────────────────────── */
+.input-field {
+  width: 100%;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-family: 'Manrope', sans-serif;
+  color: var(--text-primary);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(27, 43, 107, 0.1);
+}
+.input-field::placeholder { color: var(--text-muted); }
+
+.text-2xs, .text-3xs { font-size: 0.78rem; line-height: 1.4; }
+
+/* Existing dashboards used hundreds of fixed 8–11px labels. Raise their
+   minimum size globally so dense security data remains readable. */
+[class*="text-[8px]"]  { font-size: 11px !important; }
+[class*="text-[9px]"]  { font-size: 12px !important; }
+[class*="text-[10px]"] { font-size: 12px !important; }
+[class*="text-[11px]"] { font-size: 13px !important; }
+
+/* ── KPI Card ──────────────────────────────────────────────────────────── */
+.kpi-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 18px 20px;
+  border-left: 4px solid transparent;
+}
+.kpi-card-green  { border-left-color: #16A34A; }
+.kpi-card-amber  { border-left-color: #D97706; }
+.kpi-card-red    { border-left-color: #DC2626; }
+.kpi-card-blue   { border-left-color: #2563EB; }
+.kpi-card-purple { border-left-color: #7C3AED; }

@@ -1,0 +1,21 @@
+{
+  "behavior": {
+    "bufferIntervalSeconds": 30,
+    "coldStartSessions": 30,
+    "coldStartBehaviorRiskCap": 12,
+    "maxBehaviorRisk": 40
+  },
+  "training": {
+    "minPersonalSessions": 30,
+    "establishedProfileSessions": 100
+  },
+  "trust": {
+    "allowThreshold": 80,
+    "otpThreshold": 60,
+    "alertThreshold": 40,
+    "holdThreshold": 20
+  },
+  "features": {
+    "version": "v1.0"
+  }
+}
