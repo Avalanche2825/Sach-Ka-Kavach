@@ -3,11 +3,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://<YOUR-RENDER-BACKEND-URL>/api/$1"
+      "destination": "https://sach-ka-kavach.onrender.com/api/$1"
     },
     {
       "source": "/socket.io/(.*)",
-      "destination": "https://<YOUR-RENDER-BACKEND-URL>/socket.io/$1"
+      "destination": "https://sach-ka-kavach.onrender.com/socket.io/$1"
     },
     {
       "source": "/(.*)",
