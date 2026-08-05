@@ -7,6 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'SACH_Kavach_2026';
 
 export const loginUser = async (req, res) => {
   try {
+    const { username, cif, password } = req.body;
     const searchCif = cif || username;
     const searchUsername = username || cif;
     if (!searchCif || !password) {
