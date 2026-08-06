@@ -64,6 +64,22 @@ export default function TransactionForm({
       // Flush latest behavioral signals immediately in background
       await flushBehaviorSignals(selectedCustomer.cif, targetSessionId);
 
+      const behaviorSignals = {
+        typingSpeedAvg: 230.0,
+        typingVariance: 25.0,
+        copyPasteDetected: false,
+        hesitationTimeSeconds: 1.1,
+        navigationDepth: 4,
+        actionsPerMinute: 8,
+      };
+
+      const deviceSignals = {
+        visitorId: localStorage.getItem("sach_kavach_visitor_id") || "fp_dev_hash_1",
+        userAgent: navigator.userAgent,
+        currentIP: selectedCustomer.currentIP || "103.88.24.12",
+        isNewDevice: false,
+      };
+
       const response = await fetch("/api/transactions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -76,7 +92,9 @@ export default function TransactionForm({
           currentDevice: selectedCustomer.currentDevice,
           currentLocation: selectedCustomer.currentLocation,
           isNewDevice: false,
-          sessionId: targetSessionId
+          sessionId: targetSessionId,
+          behaviorSignals,
+          deviceSignals
         })
       });
       const data = await response.json();

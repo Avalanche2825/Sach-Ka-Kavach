@@ -181,6 +181,7 @@ export const collectDeviceSignals = async (req, res) => {
     });
 
     // Save Device Decision
+    const decisionAction = simSwap.isSimSwapRecent ? 'BLOCK' : (deviceRiskScore > 18 ? 'HOLD' : (deviceRiskScore > 12 ? 'OTP' : 'ALLOW'));
     await dbBridge.addDeviceDecision({
       sessionId: eventDoc.sessionId,
       cif,
@@ -192,8 +193,19 @@ export const collectDeviceSignals = async (req, res) => {
       budgetAllocations: mlResult.budgetAllocations || {},
       riskFactors: mlResult.riskFactors || [],
       featureImportances: mlResult.featureImportances || {},
-      decisionAction: simSwap.isSimSwapRecent ? 'BLOCK' : (deviceRiskScore > 18 ? 'HOLD' : (deviceRiskScore > 12 ? 'OTP' : 'ALLOW')),
+      decisionAction,
       correlationId
+    });
+
+    const auditDecision = decisionAction === 'OTP' ? 'OTP_REQUIRED' : decisionAction;
+    await dbBridge.addAuditLog({
+      timestamp: new Date().toISOString(),
+      user: 'Device Intelligence Engine',
+      event: `Device Telemetry Analyzed for ${customer?.name || cif} (Device Risk: ${deviceRiskScore}/25, Behavior Risk: ${behaviorRiskScore}/40)`,
+      riskScore: Math.round((deviceRiskScore / 25) * 100),
+      trustScore: 100 - Math.round((deviceRiskScore / 25) * 100),
+      riskFactors: mlResult.riskFactors || [],
+      decision: auditDecision
     });
 
     // Register / Update Device Hardware Record

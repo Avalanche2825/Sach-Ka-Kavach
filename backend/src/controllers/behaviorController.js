@@ -312,8 +312,23 @@ export const collectBehaviorSignals = async (req, res) => {
       timestamp: new Date().toISOString()
     };
 
+    const prevTrustScore = customer.trustScore;
+
     // Update customer score
     await dbBridge.updateCustomer(cif, { trustScore });
+
+    // If trust score changed, log to Audit Trail
+    if (prevTrustScore !== undefined && prevTrustScore !== trustScore) {
+      await dbBridge.addAuditLog({
+        timestamp: new Date().toISOString(),
+        user: 'Behavioral Trust Engine',
+        event: `Trust Score updated for ${customer.name || cif}: ${prevTrustScore} → ${trustScore}`,
+        riskScore,
+        trustScore,
+        riskFactors: mlResult.factors || [],
+        decision,
+      });
+    }
 
     // Persist trust score
     await dbBridge.addTrustScore(event);
