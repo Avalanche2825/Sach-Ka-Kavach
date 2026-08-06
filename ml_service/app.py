@@ -31,7 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-PORT = int(os.environ.get('ML_PORT', 5001))
+PORT = int(os.environ.get('PORT', os.environ.get('ML_PORT', 5001)))
 
 print("\n=== SACH Kavach ML Engine Initializing ===")
 behavioral = BehavioralTrustEngine()
