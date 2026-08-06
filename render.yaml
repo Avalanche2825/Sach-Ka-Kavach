@@ -1,18 +1,18 @@
 services:
-  # 1. Python ML Private Service (Runs internally on port 5001)
-  - type: pserv
+  # 1. Python ML Service (Web Service - needs public URL for backend to reach)
+  - type: web
     name: sach-kavach-ml-service
     runtime: python
     rootDir: ml_service
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -k uvicorn.workers.UvicornWorker app:app --bind 0.0.0.0:5001
+    startCommand: gunicorn -k uvicorn.workers.UvicornWorker app:app --bind 0.0.0.0:$PORT
     envVars:
-      - key: ML_PORT
-        value: 5001
+      - key: PORT
+        value: 10000
 
   # 2. Node.js Backend API (Web Service, runs on port 4000)
   - type: web
-    name: sach-kavach-backend
+    name: sach-ka-kavach
     runtime: node
     rootDir: backend
     buildCommand: npm install
@@ -21,9 +21,9 @@ services:
       - key: PORT
         value: 4000
       - key: ML_SERVICE_URL
-        value: http://sach-kavach-ml-service:5001
+        value: https://sach-kavach-ml-service.onrender.com
       - key: FRONTEND_URL
-        value: https://sach-kavach-frontend.vercel.app
+        value: https://sach-ka-kavach.vercel.app
       - key: MONGODB_URI
         sync: false
       - key: GROK_API_KEY

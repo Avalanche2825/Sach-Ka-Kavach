@@ -12,10 +12,20 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:5001';
 
+const ALLOWED_ORIGINS = [
+  'https://sach-ka-kavach.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:4173',
+];
+
 // ── HTTP server + Socket.io ───────────────────────────────────────────────────
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
-  cors: { origin: '*' },
+  cors: {
+    origin: ALLOWED_ORIGINS,
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
   transports: ['websocket', 'polling'],
 });
 
@@ -23,7 +33,16 @@ const io = new Server(httpServer, {
 app.locals.io = io;
 
 // ── Middleware ────────────────────────────────────────────────────────────────
-app.use(cors());
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS policy: origin ${origin} not allowed`));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 // ── Routes ────────────────────────────────────────────────────────────────────
